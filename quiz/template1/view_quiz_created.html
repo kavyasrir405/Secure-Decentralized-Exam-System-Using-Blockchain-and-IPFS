@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quizzes Created</title>
+</head>
+<body>
+    <h1>Quizzes Created by {{ user.username }}</h1>
+    <ul>
+        {% for quiz in quizzes %}
+            <li><a href="{% url 'view_each_quiz' quiz.quiz_id %}">{{ quiz.quiz_name }}</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

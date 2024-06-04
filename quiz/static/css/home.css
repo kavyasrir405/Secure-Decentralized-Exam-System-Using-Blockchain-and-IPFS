@@ -1,0 +1,57 @@
+/* home.css */
+
+/* Body styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+
+/* Container styles */
+.container {
+    
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Heading styles */
+h1 {
+    position: relative;
+    top: 100px;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Button styles */
+button {
+    position: relative;
+    top: 130px;
+    left: 580px;
+    width: 100px;
+    background-color: #9c69d6;
+    color: #fff;
+    font-size:20px;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 5px;
+    text-decoration: none;
+}
+
+button:hover {
+    background-color: #712bc1;
+}
+
+/* Link styles */
+a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+a:hover {
+    text-decoration: underline;
+}

@@ -1,0 +1,36 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="{% static 'css/signup.css' %}">
+</head>
+<body>
+    <h2>Sign Up</h2>
+    <form method="post" action="{% url 'signup' %}">  <!-- Specify action attribute -->
+        {% csrf_token %}
+        <div>
+            <label for="id_username">Username:</label>
+            {{ form.username }}
+           
+        </div>
+        <div>
+            <label for="id_user_type">User Type:</label>
+            {{ form.user_type }}
+            <!-- You can customize error output here if needed -->
+        </div>
+        <div>
+            <label for="id_password1">Password:</label>
+            {{ form.password1 }}
+            <!-- You can customize error output here if needed -->
+        </div>
+        <div>
+            <label for="id_password2">Confirm Password:</label>
+            {{ form.password2 }}
+            <!-- You can customize error output here if needed -->
+        </div>
+        <button type="submit">Sign Up</button>
+    </form>
+</body>
+</html>

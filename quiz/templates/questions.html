@@ -1,0 +1,162 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quiz Questions</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.7.0/dist/web3.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/questions.css' %}">
+
+</head>
+<body>
+    <h1>Quiz Questions</h1>
+    
+    <!-- Display quiz ID -->
+    <h3 class="qid">Quiz ID: {{quizid}}</h3>
+    
+    <!-- Container to display questions -->
+    <div id="questions"></div>
+
+    <script>
+        // Connect to the Ethereum network
+        if (window.ethereum) {
+            window.web3 = new Web3(window.ethereum);
+            window.ethereum.enable();
+        } else {
+            console.error('No Ethereum provider detected. Install MetaMask or another wallet.');
+        }
+
+        // Contract ABI and Address
+        const contractABI = [
+            {
+                "constant": true,
+                "inputs": [{"name": "_quizId", "type": "uint256"}],
+                "name": "getQuiz",
+                "outputs": [
+                    {"name": "quizName", "type": "string"},
+                    {"name": "questionCount", "type": "uint256"}
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
+                    {"name": "_quizId", "type": "uint256"},
+                    {"name": "_questionId", "type": "uint256"}
+                ],
+                "name": "getQuestion",
+                "outputs": [
+                    {"name": "text", "type": "string"},
+                    {"name": "assignedMarks", "type": "uint256"}
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "constant": false,
+                "inputs": [
+                    {"name": "_quizId", "type": "uint256"},
+                    {"name": "_questionId", "type": "uint256"},
+                    {"name": "_imageCid", "type": "string"}
+                ],
+                "name": "submitAnswer",
+                "outputs": [],
+                "payable": false,
+                "stateMutability": "nonpayable",
+                "type": "function"
+            }
+        ];
+        const quizId = "{{quizid}}";
+        const contractAddress = '0xDcBB5A881394e0F4E5370967Cfd44C479041F2d0'; // Replace with your contract's address
+        const contract = new web3.eth.Contract(contractABI, contractAddress);
+
+        async function getQuizQuestions() {
+            // Remove defining quizId here
+        
+            try {
+                const quiz = await contract.methods.getQuiz(quizId).call();
+                const questionCount = quiz.questionCount;
+                let questionsHTML = `<h3>Quiz name : ${quiz.quizName} </h3>`;
+                for (let i = 0; i < questionCount; i++) {
+                    const question = await contract.methods.getQuestion(quizId, i).call();
+                    questionsHTML += `
+                        <div>
+                            <h4>Question ${i+1}: ${question.text} (Marks: ${question.assignedMarks})</h4>
+        
+                            <form class="uploadForm" enctype="multipart/form-data" data-question-id="${i}">
+                                {% csrf_token %}
+                                <input type="file" name="picture" accept="image/*" required>
+                                <button type="submit">Upload</button>
+                                <div><h4 class="result"></h4></div>
+                            </form>
+                        </div>
+                    `;
+                }
+                document.getElementById('questions').innerHTML = questionsHTML;
+                
+                document.querySelectorAll('.uploadForm').forEach(form => {
+                    form.addEventListener('submit', function(event) {
+                        event.preventDefault();
+                        var formData = new FormData(this);
+                        var questionId = this.dataset.questionId;
+                        fetch(`/questions/${quizId}/upload_to_ipfs/`, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                            },
+                            body: formData,
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.success) {
+                                var ipfsHash = data.ipfs_hash;
+                                submitAnswer(quizId, questionId, ipfsHash);
+                                this.querySelector('.result').innerHTML = `Picture uploaded successfully to Pinata! IPFS hash: ${ipfsHash}`;
+                            } else {
+                                // Display error message
+                                this.querySelector('.result').textContent = `Error: ${data.error}`;
+                            }
+                        })
+                        .catch(error => {
+                            // Display fetch error
+                            this.querySelector('.result').textContent = `Fetch error: ${error.message}`;
+                        });
+                    });
+                });
+            } catch (error) {
+                console.error("Error fetching quiz questions:", error);
+            }
+        }
+        
+
+        
+        async function submitAnswer(quizId, questionId, imageCid) {
+            try {
+                // Get user account
+                const accounts = await window.web3.eth.getAccounts();
+                const userAccount = accounts[0];
+        
+                // Contract instance
+                const contract = new window.web3.eth.Contract(contractABI, contractAddress);
+        
+                // Call the submitAnswer function
+                await contract.methods.submitAnswer(quizId, questionId, imageCid).send({ from: userAccount });
+        
+                console.log("Answer submitted successfully!");
+            } catch (error) {
+                console.error("Error submitting answer:", error);
+            }
+        }
+
+        getQuizQuestions();
+    </script>
+</body>
+</html>

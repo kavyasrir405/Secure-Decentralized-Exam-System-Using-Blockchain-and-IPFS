@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body> 
+    {% block sidebar %}
+        {% include 'sidebar.html' %}
+    {% endblock %}
+
+    {% if user.user_type == 'teacher' %}
+
+    {% block view_quiz %}
+        {% include 'view_quiz.html' %}
+    {% endblock %}
+
+    {%else%}
+    {% block assigned_quiz %}
+    {% include 'assigned_quiz.html' %}
+
+   
+{% endblock %}
+{%endif%}
+
+    
+</body>
+</html>

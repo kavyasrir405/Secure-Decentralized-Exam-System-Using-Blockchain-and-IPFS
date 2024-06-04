@@ -1,0 +1,59 @@
+/* sidebar.css */
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.sidebar {
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #1f1f1f;
+    padding-top: 20px;
+}
+
+.user-info {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.user-info p {
+    color: #fff;
+  font-size: 20px;
+  position: relative;
+  right: 20px;
+  margin-bottom: 20px;
+
+}
+
+.menu {
+    list-style-type: none;
+    padding: 0;
+}
+
+.menu li {
+    padding: 10px;
+}
+
+.menu li a {
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    padding: 10px;
+    transition: background-color 0.3s;
+}
+
+.menu li a:hover {
+    background-color: #555;
+}
+
+#user-type {
+    font-weight: bold;
+}
+
+#username {
+    font-style: italic;
+}

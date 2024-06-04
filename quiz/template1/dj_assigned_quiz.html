@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Quizzes</title>
+</head>
+<body>
+    <h1>All Quizzes</h1>
+    <ul>
+        {% for quiz in quizzes %}
+            <li>{{ quiz.quiz_name }}
+                {% if quiz.quiz_id in attempted_quizzes %}
+                    <a href="{% url 'view_marks' quiz_id=quiz.quiz_id %}">View Marks</a>
+                {% else %}
+                    <a href="{% url 'attempt_quiz' quiz_id=quiz.quiz_id %}">Start Quiz</a>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

@@ -1,0 +1,21 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attempt Quiz</title>
+</head>
+<body>
+    <h1>Attempt Quiz: {{ quiz.quiz_name }}</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for question in questions %}
+            <h3>{{ question.question_text }}</h3>
+            <input type="file" name="answer_{{ question.question_id }}" accept="image/*" required>
+            <!-- You can use "accept" attribute to specify that only image files can be uploaded -->
+        {% endfor %}
+        <button type="submit">Submit Answers</button>
+    </form>
+</body>
+</html>

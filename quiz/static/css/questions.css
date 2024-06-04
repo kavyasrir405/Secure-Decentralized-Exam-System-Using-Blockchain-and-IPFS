@@ -1,0 +1,88 @@
+/* questions.css */
+
+/* Body styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f2f2f2;
+}
+
+/* Header styles */
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+/* Quiz ID heading styles */
+.qid {
+    font-weight: bold;
+    color: #000000;
+    position: relative;
+    left: 100px;
+    top: 15px;
+    
+}
+#questions h3{
+    position: relative;
+    bottom: 95px;
+    left: 200px;
+    
+}
+/* Question container styles */
+#questions {
+    position: relative;
+    top: 30px;
+    
+    padding: 20px;
+    width: 1170px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Question styles */
+div {
+    
+    color: #000000;
+    position: relative;
+    left: 30px;
+    bottom: 82px;
+}
+
+h4 {
+   position: relative;
+  
+   margin-top: 50px;
+}
+
+/* Form styles */
+.uploadForm {
+    position: relative;
+    left: 20px;
+   
+}
+
+/* Result styles */
+.result {
+    position: relative;
+    left: 400px;
+    top: 5px;
+    
+   
+}
+
+/* Button styles */
+button {
+    background-color: #9c69d6;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #712bc1;
+}

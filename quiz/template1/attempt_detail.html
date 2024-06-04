@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attempt Detail</title>
+</head>
+<body>
+    <h1>Attempt Detail</h1>
+    <h2>User: {{ user_attempt }}</h2>
+    <h3>Quiz: {{ quiz.quiz_name }}</h3>
+
+    <form method="post" action="{% url 'save_marks' %}">
+        {% csrf_token %}
+        <ul>
+            {% for question in questions %}
+                <li>{{ question.question_text }} - {{ question.question_marks }}</li>
+                <ul>
+                    {% for answer in answers %}
+                        {% if answer.question == question %}
+                            <li>
+                                {% if answer.answer_pic %}
+                                    <a href="{{ answer.answer_pic.url }}">View Answer</a>
+                                {% endif %}
+                                <!-- Add input field for marks -->
+                                <input type="number" name="marks_{{ answer.id }}" value="{{ answer.marks }}">
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            {% endfor %}
+        </ul>
+        <!-- Add save button -->
+        <button type="submit">Save</button>
+    </form>
+    
+    
+</body>
+</html>

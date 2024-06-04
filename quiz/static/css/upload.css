@@ -1,0 +1,87 @@
+/* upload.css */
+
+/* Body styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f2f2f2;
+}
+
+/* Header styles */
+.header {
+    text-align: center;
+    color: #333;
+}
+
+/* Quiz ID heading styles */
+.quiz-id-heading {
+    font-weight: bold;
+    color: #000000;
+    position: relative;
+    left: 50px;
+}
+
+/* Quiz name styles */
+.quiz-name {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    color: #000000;
+    position: relative;
+    left: 150px;
+    bottom: 82px;
+}
+
+/* Question container styles */
+.question-container {
+    margin: 20px auto;
+    padding: 20px;
+    width: 1200px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Question styles */
+.question {
+   position: relative;
+   bottom: 50px;
+   margin-top: 50px;
+   
+}
+.question p{
+    font-weight: 500;
+}
+/* View answers button styles */
+.view-answers-btn {
+    background-color:  #9c69d6;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.view-answers-btn:hover {
+    background-color:  #712bc1;
+}
+
+/* Answer container styles */
+.answer-container {
+    margin-top: 10px;
+    position: relative;
+    left: 150px;
+bottom:35px;
+
+}
+
+/* Answer link styles */
+.answer-link {
+    color:  #712bc1;
+    text-decoration: underline;
+}
+
+.answer-link:hover {
+    color: #9c69d6;;
+}

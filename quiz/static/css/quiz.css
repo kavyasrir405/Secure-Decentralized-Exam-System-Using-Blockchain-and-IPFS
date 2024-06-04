@@ -1,0 +1,48 @@
+/* quiz.css */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    position: relative;
+    left: 50px;
+}
+
+h2 {
+    margin-bottom: 10px;
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="number"],
+button {
+    padding: 8px;
+    margin-bottom: 10px;
+    width: 200px;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #9c69d6;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #712bc1;
+}
+
+input[type="text"],
+input[type="number"] {
+    width: 500px; /* Adjusting for padding */
+}
+

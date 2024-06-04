@@ -1,0 +1,258 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Answers</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.7.0/dist/web3.min.js"></script>
+    
+    <link rel="stylesheet" href="{% static 'css/upload.css' %}">
+
+</head>
+<body>
+    <h1 class="header">View Quiz Answers</h1>
+    
+    
+    <h3 class="quiz-id-heading">Quiz ID : <span id="quizIdDisplay" class="quiz-id"></span></h3>
+    
+    <div id="questions" class="question-container"></div>
+
+    <script>
+        // Connect to the Ethereum network
+        if (window.ethereum) {
+            window.web3 = new Web3(window.ethereum);
+            window.ethereum.enable().catch((error) => {
+                console.error("User denied account access");
+            });
+        } else {
+            console.error('No Ethereum provider detected. Install MetaMask or another wallet.');
+        }
+    
+        // Contract ABI
+        const contractABI = [
+            {
+                "constant": false,
+                "inputs": [
+                    {
+                        "name": "_quizId",
+                        "type": "uint256"
+                    },
+                    {
+                        "name": "_questionId",
+                        "type": "uint256"
+                    },
+                    {
+                        "name": "_imageCid",
+                        "type": "string"
+                    }
+                ],
+                "name": "submitAnswer",
+                "outputs": [],
+                "payable": false,
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
+                    {
+                        "name": "_quizId",
+                        "type": "uint256"
+                    },
+                    {
+                        "name": "_questionId",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "getAnswerImage",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "string"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [],
+                "name": "getQuizCount",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
+                    {
+                        "name": "_quizId",
+                        "type": "uint256"
+                    },
+                    {
+                        "name": "_questionId",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "getQuestion",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "string"
+                    },
+                    {
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
+                    {
+                        "name": "_quizId",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "getQuiz",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "string"
+                    },
+                    {
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "constant": false,
+                "inputs": [
+                    {
+                        "name": "_quizName",
+                        "type": "string"
+                    }
+                ],
+                "name": "createQuiz",
+                "outputs": [],
+                "payable": false,
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "constant": false,
+                "inputs": [
+                    {
+                        "name": "_quizId",
+                        "type": "uint256"
+                    },
+                    {
+                        "name": "_questionText",
+                        "type": "string"
+                    },
+                    {
+                        "name": "_assignedMarks",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "addQuestion",
+                "outputs": [],
+                "payable": false,
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [],
+                "name": "getAllQuizzes",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "string[]"
+                    },
+                    {
+                        "name": "",
+                        "type": "uint256[]"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {
+                        "indexed": false,
+                        "name": "quizId",
+                        "type": "uint256"
+                    },
+                    {
+                        "indexed": false,
+                        "name": "quizName",
+                        "type": "string"
+                    }
+                ],
+                "name": "QuizCreated",
+                "type": "event"
+            }
+        ];
+    
+        const contractAddress = '0xDcBB5A881394e0F4E5370967Cfd44C479041F2d0'; // Replace with your contract's address
+        const contract = new web3.eth.Contract(contractABI, contractAddress);
+    
+        // Function to get questions and their answers for the given quiz ID
+        async function getQuizQuestionsAndAnswers() {
+            const quizId = {{quizid}}; // Replace "0" with the actual quiz ID
+            document.getElementById('quizIdDisplay').innerText = quizId;
+            try {
+                const quiz = await contract.methods.getQuiz(quizId).call();
+                const questionCount = quiz[1];
+                let questionsHTML = `<h3 class="quiz-name">Quiz name : ${quiz[0]} </h3>`;
+                for (let i = 0; i < questionCount; i++) {
+                    const question = await contract.methods.getQuestion(quizId, i).call();
+                    questionsHTML += `
+                        <div class="question">
+                            <h4>Question ${i+1}: ${question[0]} (Marks: ${question[1]})</h4>
+                            <button class="view-answers-btn" onclick="viewAnswers(${quizId}, ${i})">View Answer</button>
+                            <div id="answers-${i}" class="answer-container"></div>
+                        </div>
+                    `;
+                }
+                document.getElementById('questions').innerHTML = questionsHTML;
+            } catch (error) {
+                console.error("Error fetching quiz questions:", error);
+            }
+        }
+    
+        
+async function viewAnswers(quizId, questionId) {
+    try {
+        const answer = await contract.methods.getAnswerImage(quizId, questionId).call();
+        const ipfsUrl = "https://brown-accused-hedgehog-579.mypinata.cloud/ipfs/";
+        const fullUrl = ipfsUrl + answer;
+        document.getElementById(`answers-${questionId}`).innerHTML = `<a href="${fullUrl}" class="answer-link" target="_blank">Question ${questionId+1} Answer Image url </a>`;
+    } catch (error) {
+        console.error("Error fetching answer:", error);
+    }
+}
+
+getQuizQuestionsAndAnswers();
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Quiz</title>
+</head>
+<body>
+    <h2>Create Quiz</h2>
+    <form method="post" action="{% url 'quiz' %}" id="quiz_form">
+        {% csrf_token %}
+        <label for="quiz_name">Quiz Name:</label>
+        <input type="text" id="quiz_name" name="quiz_name" required><br><br>
+
+        <div id="questions_container">
+            <div class="question">
+                <label for="question_text">Question:</label>
+                <input type="text" class="question_text" name="question_text[]" required>
+                <label for="question_marks">Marks:</label>
+                <input type="text" class="question_marks" name="question_marks[]" required><br><br>
+            </div>
+        </div>
+
+        <button type="button" onclick="addQuestion()">Add Question</button><br><br>
+
+        <button type="submit">Save Quiz</button>
+    </form>
+
+    <script>
+        function addQuestion() {
+            var container = document.getElementById('questions_container');
+            var questionDiv = document.createElement('div');
+            questionDiv.className = 'question';
+            questionDiv.innerHTML = `
+                <label for="question_text">Question:</label>
+                <input type="text" class="question_text" name="question_text[]" required>
+                <label for="question_marks">Marks:</label>
+                <input type="text" class="question_marks" name="question_marks[]" required><br><br>
+            `;
+            container.appendChild(questionDiv);
+        }
+    </script>
+</body>
+</html>
